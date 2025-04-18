@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .hero {
+            height: 100vh;
+            width: 100%;
+            background-image: url('canyon-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero-content {
+            z-index: 2;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: normal;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            font-size: 1rem;
+            opacity: 0.8;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .months-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .month-card {
+            height: 300px;
+            background-color: rgba(255, 240, 245, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .month-name {
+            color: #d66d8b;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-front {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            transition: transform 0.6s ease;
+        }
+        
+        .card-back {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            transition: transform 0.6s ease;
+        }
+        
+        .card-back .quote {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 4px;
+            font-style: italic;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        .month-card:hover .card-front {
+            transform: rotateY(180deg);
+        }
+        
+        .month-card:hover .card-back {
+            transform: rotateY(0);
+        }
+        
+        .hint-text {
+            color: #999;
+            text-align: center;
+        }
+        
+        .customize-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Heart Puzzle Styles */
+        .heart-puzzle-container {
+            padding: 80px 0;
+            background-color: rgba(253, 245, 230, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .heart-puzzle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+        
+        .heart-half {
+            position: absolute;
+            width: 150px;
+            height: 300px;
+            top: 0;
+            overflow: visible;
+            transition: all 0.8s ease;
+        }
+        
+        .heart-left {
+            left: 0;
+            transform-origin: right center;
+            transform: translateX(-30px);
+        }
+        
+        .heart-right {
+            right: 0;
+            transform-origin: left center;
+            transform: translateX(30px);
+        }
+        
+        .heart-svg {
+            width: 150px;
+            height: 300px;
+        }
+        
+        .joined-heart {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+        
+        .joined-heart-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .rope {
+            position: absolute;
+            width: 30px;
+            height: 150px;
+            bottom: -150px;
+            left: 135px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .rope:hover {
+            transform: translateY(-10px);
+        }
+        
+        .rope-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .pull-arrow {
+            position: absolute;
+            bottom: 0;
+            right: -80px;
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #102030;
+        }
+        
+        .pull-arrow svg {
+            width: 50px;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+        
+        /* Class for when heart is joined */
+        .heart-joined .heart-left,
+        .heart-joined .heart-right {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .heart-joined .joined-heart {
+            opacity: 1;
+        }
+        
+        .heart-joined .rope {
+            transform: translateY(-20px);
+        }
+        
+        @media (max-width: 900px) {
+            .months-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .months-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Our Love Story</h1>
+            <p class="subtitle">A year of cherished moments together...</p>
+        </div>
+        <p class="scroll-hint">Scroll down to explore our memories</p>
+    </div>
+    
+    <div class="heart-puzzle-container">
+        <div class="heart-puzzle">
+            <div class="heart-half heart-left">
+                <svg viewBox="0 0 100 100" class="heart-svg">
+                    <path d="M50,10 C35,0 0,0 0,30 C0,60 20,70 50,100" fill="#fefbf3" stroke="#102030" stroke-width="3"></path>
+                    <path d="M25,25 L50,25 M25,45 L40,45 M25,65 L35,65" stroke="#102030" stroke-width="1.5" fill="none"></path>
+                    <text x="17" y="50" font-family="Arial" font-size="18" font-weight="bold" fill="#102030">DE</text>
+                </svg>
+            </div>
+            <div class="heart-half heart-right">
+                <svg viewBox="0 0 100 100" class="heart-svg">
+                    <path d="M50,10 C65,0 100,0 100,30 C100,60 80,70 50,100" fill="#fefbf3" stroke="#102030" stroke-width="3"></path>
+                    <path d="M50,25 L75,25 M60,45 L75,45 M65,65 L75,65" stroke="#102030" stroke-width="1.5" fill="none"></path>
+                    <text x="63" y="50" font-family="Arial" font-size="18" font-weight="bold" fill="#102030">AR</text>
+                </svg>
+            </div>
+            <div class="joined-heart">
+                <svg viewBox="0 0 100 100" class="joined-heart-svg">
+                    <path d="M50,10 C35,0 0,0 0,30 C0,60 20,70 50,100 C80,70 100,60 100,30 C100,0 65,0 50,10" fill="#fefbf3" stroke="#102030" stroke-width="3"></path>
+                    <text x="27" y="50" font-family="Arial" font-size="18" font-weight="bold" fill="#102030">DEAR</text>
+                </svg>
+            </div>
+            <div class="rope" id="heartRope">
+                <svg viewBox="0 0 100 80" class="rope-svg">
+                    <path d="M50,0 C48,10 52,20 50,30 C48,40 52,50 50,60 C48,70 52,80 50,90" stroke="#102030" stroke-width="2" fill="none"></path>
+                </svg>
+                <div class="pull-arrow">
+                    <svg viewBox="0 0 50 30">
+                        <path d="M5,15 L45,15 M45,15 L35,5 M45,15 L35,25" stroke="#102030" stroke-width="2" fill="none"></path>
+                    </svg>
+                    <span>Pull this</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="months-grid">
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">January</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('january-photo.jpg')">
+                <div class="quote">"The day we first met, I knew something magical had begun."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">February</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('february-photo.jpg')">
+                <div class="quote">"Our first Valentine's Day together was unforgettable."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">March</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('march-photo.jpg')">
+                <div class="quote">"That spontaneous road trip where we got lost and found ourselves."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">April</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('april-photo.jpg')">
+                <div class="quote">"Spring blossomed, and so did our love."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">May</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('may-photo.jpg')">
+                <div class="quote">"That picnic in the park where time stood still."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">June</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('june-photo.jpg')">
+                <div class="quote">"Summer nights under the stars, dreaming about forever."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">July</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('july-photo.jpg')">
+                <div class="quote">"Fireworks in the sky couldn't match the ones in my heart."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">August</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('august-photo.jpg')">
+                <div class="quote">"That beach day when you told me I was your forever."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">September</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('september-photo.jpg')">
+                <div class="quote">"Autumn leaves falling, but our love only grew stronger."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">October</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('october-photo.jpg')">
+                <div class="quote">"Our first Halloween together - you scared me in more ways than one."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">November</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('november-photo.jpg')">
+                <div class="quote">"Thankful doesn't begin to describe how I feel about having you."</div>
+            </div>
+        </div>
+        
+        <div class="month-card">
+            <div class="card-front">
+                <h3 class="month-name">December</h3>
+                <p class="hint-text">Hover to reveal</p>
+            </div>
+            <div class="card-back" style="background-image: url('december-photo.jpg')">
+                <div class="quote">"As the year ends, our story is just beginning."</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="customize-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+    </div>
+
+    <script>
+        // For mobile touch support on month cards
+        document.querySelectorAll('.month-card').forEach(card => {
+            card.addEventListener('touchstart', function() {
+                const cardFront = this.querySelector('.card-front');
+                const cardBack = this.querySelector('.card-back');
+                
+                if (cardFront.style.transform === 'rotateY(180deg)') {
+                    cardFront.style.transform = 'rotateY(0)';
+                    cardBack.style.transform = 'rotateY(180deg)';
+                } else {
+                    cardFront.style.transform = 'rotateY(180deg)';
+                    cardBack.style.transform = 'rotateY(0)';
+                }
+            });
+        });
+        
+        // Heart puzzle interaction
+        document.getElementById('heartRope').addEventListener('click', function() {
+            const heartPuzzle = document.querySelector('.heart-puzzle');
+            if (heartPuzzle.classList.contains('heart-joined')) {
+                heartPuzzle.classList.remove('heart-joined');
+            } else {
+                heartPuzzle.classList.add('heart-joined');
+            }
+        });
+        
+        // Smooth scroll
+        document.querySelector('.scroll-hint').addEventListener('click', () => {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
